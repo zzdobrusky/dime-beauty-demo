@@ -1,0 +1,15 @@
+.bundle_container {
+    display: flex;
+    padding: 2em;
+    flex-direction: row;
+}
+
+.bundle {
+    padding: 1em;
+}
+
+@media (max-width: 600px) {
+    .bundle_container {
+      flex-direction: column;
+    }
+  }

@@ -1,0 +1,25 @@
+.title {
+    font-weight: bold;
+}
+
+.price {
+    margin-top: 0.3em;
+    // font-weight: bold;
+}
+
+.reviews_container {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+
+.reviews {
+    color: gray;
+    margin-left: 0.5em;
+    font-size: larger;
+    font-weight: 600;
+}
+
+.button { 
+    padding: 1em;
+}
