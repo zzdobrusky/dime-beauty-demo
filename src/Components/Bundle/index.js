@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import {
     AppBar,
     Toolbar,
     Typography,
     Drawer,
+    LinearProgress,
+    Box
 } from '@mui/material';
 
 import AddToBundle from './AddToBundle';
-import LinearProgress from './LinearProgress';
+import SavingsProgress from './SavingsProgress';
 
 import styles from './styles.module.scss';
 
 const bottomBarHeight = '150px';
 
-const items = [
+const data = [
     {
         id: 1,
         title: 'Probiotic Gel Cream',
@@ -53,34 +54,35 @@ const items = [
 
 export default class Bundle extends Component {
     state = {
-        // key:value pairs, both keys (id) and values (number of items in a cart) are numbers
-        selectedItems: {},
+        items: [], // TODO: this will get populated from api
+        selectedItems: {}, // key:value pairs, both keys (id) and values (number of items in a cart) are numbers
         bundlePrice: 0,
-        savings: 0
+        savings: 0,
+        loading: false,
     };
 
     onAdd = (id) => {
         const { selectedItems } = this.state;
         const countInCart = selectedItems[id];
         selectedItems[id] = Number.isInteger(countInCart) ? (countInCart + 1) : 1;
-        this.setState({ 
+        this.setState({
             selectedItems,
             ...this.getBundlePrice(),
-        });  
+        });
     }
 
     onRemove = (id) => {
         const { selectedItems } = this.state;
         const countInCart = selectedItems[id];
         selectedItems[id] = Number.isInteger(countInCart) && countInCart > 0 ? (countInCart - 1) : 0;
-        this.setState({ 
+        this.setState({
             selectedItems,
             ...this.getBundlePrice(),
-        });  
+        });
     }
 
     getBundlePrice = () => {
-        const { selectedItems } = this.state;
+        const { selectedItems, items } = this.state;
         let bundlePrice = 0;
         let savings = 0;
         Object.entries(selectedItems).forEach(([id, countInCart]) => {
@@ -89,16 +91,28 @@ export default class Bundle extends Component {
         });
 
         if (bundlePrice >= 100) {
-            savings = bundlePrice/10;
+            savings = bundlePrice / 10;
             bundlePrice = bundlePrice - savings;
         }
         return { bundlePrice, savings };
     }
 
-    render() {
-        const { selectedItems, bundlePrice, savings } = this.state;
+    componentDidMount() {
+        // TODO: loading data from api instead, using timout to simulate
+        this.setState({ loading: true });
+        setTimeout(() => this.setState({ items: data, loading: false }), 2000);
+    }
 
-        return (
+    render() {
+        const { selectedItems, bundlePrice, savings, items, loading } = this.state;
+
+        return loading
+            ?
+            <Box sx={{ width: '60%', margin: '50% auto auto auto' }}>
+                <LinearProgress />
+            </Box>
+            
+            :
             <>
                 <div className={styles.container}>
                     {items.map(item =>
@@ -151,13 +165,9 @@ export default class Bundle extends Component {
                             <div>${bundlePrice}</div>
                             <div>${savings}</div>
                         </div>
-                        <LinearProgress widthPercentage={50} />
+                        <SavingsProgress widthPercentage={savings > 0 ? 50 : 0} />
                     </div>
                 </Drawer>
-
-
-            </>
-
-        );
+            </>;
     }
 }
