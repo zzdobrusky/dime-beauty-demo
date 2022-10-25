@@ -6,7 +6,10 @@ import Bundle from './Components/Bundle';
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#222",
+      main: '#222',
+    },
+    secondary: {
+      main: '#FFE4C4'
     }
   }
 });

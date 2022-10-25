@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
     Card,
-    CardActions,
     CardContent,
     CardMedia,
     Typography
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import ReactStars from "react-rating-stars-component";
+import ReactStars from 'react-rating-stars-component';
 import styles from './styles.module.scss';
 
 export default class AddToBundle extends Component {
@@ -23,7 +22,7 @@ export default class AddToBundle extends Component {
     }
 
     render() {
-        const { title, numOfReviews, price, onAdd, starValue, imgPath } = this.props;
+        const { title, numOfReviews, price, onAdd, starValue, imgPath, isSelected } = this.props;
 
         return (
             <Card
@@ -31,13 +30,13 @@ export default class AddToBundle extends Component {
                 raised
             >
                 <CardMedia
-                    component="img"
-                    alt="green iguana"
-                    height="240"
+                    component='img'
+                    alt='green iguana'
+                    height='240'
                     image={imgPath}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" className={styles.title}>
+                    <Typography gutterBottom variant='h5' className={styles.title}>
                         {title}
                     </Typography>
                     <div className={styles.reviews_container}>
@@ -53,18 +52,19 @@ export default class AddToBundle extends Component {
                         <div className={styles.reviews}>{numOfReviews} reviews</div>
                     </div>
 
-                    <Typography variant="h5" className={styles.price}>
+                    <Typography variant='h5' className={styles.price}>
                         ${price}
                     </Typography>
                 </CardContent>
-                <div style={{ padding: '1em'}}>
+                <div style={{ padding: '1em' }}>
                     <LoadingButton
-                        variant="contained"
+                        variant='contained'
                         fullWidth
                         size='large'
                         onClick={onAdd}
+                        disabled={isSelected}
                     >
-                        Add to Bundle
+                        {isSelected ? 'In Bunde' : 'Add to Bundle'}
                     </LoadingButton >
                 </div>
             </Card>

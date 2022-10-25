@@ -1,0 +1,14 @@
+.container {
+    margin-top: 1em;
+    background-color: #FFE4C4;
+    border-radius: 15px;
+    width: 100%;
+    height: 1.5em;
+}
+
+.inner {
+    border-radius: 15px 0 0 15px;
+    background-color:  #222;
+    height: 1.5em;
+    // display: inline-block;
+}
