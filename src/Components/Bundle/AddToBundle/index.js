@@ -4,9 +4,14 @@ import {
     Card,
     CardContent,
     CardMedia,
-    Typography
+    Typography,
+    IconButton,
+    Stack 
 } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
+import {
+    AddShoppingCart,
+    RemoveShoppingCart,
+ } from '@mui/icons-material';
 import ReactStars from 'react-rating-stars-component';
 import styles from './styles.module.scss';
 
@@ -22,11 +27,11 @@ export default class AddToBundle extends Component {
     }
 
     render() {
-        const { title, numOfReviews, price, onAdd, starValue, imgPath, isSelected } = this.props;
+        const { title, numOfReviews, price, onAdd, onRemove, starValue, imgPath, countInCart } = this.props;
 
         return (
             <Card
-                sx={{ width: 300, borderRadius: '16px' }}
+                sx={{ width: 270, borderRadius: '16px' }}
                 raised
             >
                 <CardMedia
@@ -36,7 +41,7 @@ export default class AddToBundle extends Component {
                     image={imgPath}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant='h5' className={styles.title}>
+                    <Typography gutterBottom variant='h6' className={styles.title}>
                         {title}
                     </Typography>
                     <div className={styles.reviews_container}>
@@ -52,21 +57,31 @@ export default class AddToBundle extends Component {
                         <div className={styles.reviews}>{numOfReviews} reviews</div>
                     </div>
 
-                    <Typography variant='h5' className={styles.price}>
-                        ${price}
+                    <Typography variant='h6' className={styles.priceAndCart}>
+                        <div>${price}</div>
+                        <div>In Cart: {countInCart}</div>
                     </Typography>
                 </CardContent>
-                <div style={{ padding: '1em' }}>
-                    <LoadingButton
+                <Stack direction="row" spacing={1} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <IconButton
+                        color="primary"
+                        aria-label="add to shopping cart"
                         variant='contained'
-                        fullWidth
                         size='large'
                         onClick={onAdd}
-                        disabled={isSelected}
                     >
-                        {isSelected ? 'In Bunde' : 'Add to Bundle'}
-                    </LoadingButton >
-                </div>
+                        <AddShoppingCart />
+                    </IconButton>
+                    <IconButton
+                        color="primary"
+                        aria-label="remove from shopping cart"
+                        variant='contained'
+                        size='large'
+                        onClick={onRemove}
+                    >
+                        <RemoveShoppingCart />
+                    </IconButton>
+                </Stack>
             </Card>
         );
     }

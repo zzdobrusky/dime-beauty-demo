@@ -6,8 +6,10 @@
     font-weight: bold;
 }
 
-.price {
+.priceAndCart {
     margin-top: 0.3em;
+    display: flex;
+    justify-content: space-between;
 }
 
 .reviews_container {
@@ -21,8 +23,4 @@
     margin-left: 0.5em;
     font-size: larger;
     font-weight: 600;
-}
-
-.button { 
-    padding: 1em;
 }

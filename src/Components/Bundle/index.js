@@ -13,7 +13,7 @@ import LinearProgress from './LinearProgress';
 
 import styles from './styles.module.scss';
 
-const bottomBarHeight = '130px';
+const bottomBarHeight = '150px';
 
 const items = [
     {
@@ -53,11 +53,50 @@ const items = [
 
 export default class Bundle extends Component {
     state = {
-        selectedItems: []
+        // key:value pairs, both keys (id) and values (number of items in a cart) are numbers
+        selectedItems: {},
+        bundlePrice: 0,
+        savings: 0
     };
 
-    render() {
+    onAdd = (id) => {
         const { selectedItems } = this.state;
+        const countInCart = selectedItems[id];
+        selectedItems[id] = Number.isInteger(countInCart) ? (countInCart + 1) : 1;
+        this.setState({ 
+            selectedItems,
+            ...this.getBundlePrice(),
+        });  
+    }
+
+    onRemove = (id) => {
+        const { selectedItems } = this.state;
+        const countInCart = selectedItems[id];
+        selectedItems[id] = Number.isInteger(countInCart) && countInCart > 0 ? (countInCart - 1) : 0;
+        this.setState({ 
+            selectedItems,
+            ...this.getBundlePrice(),
+        });  
+    }
+
+    getBundlePrice = () => {
+        const { selectedItems } = this.state;
+        let bundlePrice = 0;
+        let savings = 0;
+        Object.entries(selectedItems).forEach(([id, countInCart]) => {
+            const pricePerItemCount = items.find(item => item.id === parseInt(id))?.price * countInCart;
+            bundlePrice = bundlePrice + pricePerItemCount;
+        });
+
+        if (bundlePrice >= 100) {
+            savings = bundlePrice/10;
+            bundlePrice = bundlePrice - savings;
+        }
+        return { bundlePrice, savings };
+    }
+
+    render() {
+        const { selectedItems, bundlePrice, savings } = this.state;
 
         return (
             <>
@@ -70,8 +109,9 @@ export default class Bundle extends Component {
                                 price={item.price}
                                 starValue={item.starValue}
                                 onAdd={() => this.onAdd(item.id)}
+                                onRemove={() => this.onRemove(item.id)}
                                 imgPath={item.imgPath}
-                                isSelected={selectedItems.find(selected => selected.id === item.id)}
+                                countInCart={selectedItems[item.id] || 0}
                             />
                         </div>
                     )}
@@ -108,8 +148,8 @@ export default class Bundle extends Component {
                             <div>Your Savings</div>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'x-large', fontWeight: 'bold' }}>
-                            <div>$0</div>
-                            <div>$0</div>
+                            <div>${bundlePrice}</div>
+                            <div>${savings}</div>
                         </div>
                         <LinearProgress widthPercentage={50} />
                     </div>
@@ -119,9 +159,5 @@ export default class Bundle extends Component {
             </>
 
         );
-    }
-
-    onAdd = (id) => {
-        console.log('clicked id: ', id);
     }
 }
